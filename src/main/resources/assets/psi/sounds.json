@@ -16,7 +16,10 @@
   "cad_shoot": {
     "category": "player",
     "sounds": [
-      "psi:cad_shoot"
+      {
+        "name": "psi:cad_shoot",
+        "volume": 0.5
+      }
     ],
     "subtitle": "psi.subtitle.spell_cast"
   },
