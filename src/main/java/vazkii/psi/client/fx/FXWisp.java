@@ -34,7 +34,7 @@ import vazkii.psi.client.core.handler.ClientTickHandler;
 @OnlyIn(Dist.CLIENT)
 public class FXWisp extends TextureSheetParticle {
 
-	private static final ParticleRenderType NORMAL_RENDER = new PsiParticleRenderType() {
+	public static final ParticleRenderType ADDITIVE_TRANSLUCENT = new PsiParticleRenderType() {
 		@Override
 		public BufferBuilder begin(@NotNull Tesselator tessellator, @NotNull TextureManager textureManager) {
 			Minecraft.getInstance().gameRenderer.lightTexture().turnOnLightLayer();
@@ -113,7 +113,7 @@ public class FXWisp extends TextureSheetParticle {
 	@NotNull
 	@Override
 	public ParticleRenderType getRenderType() {
-		return NORMAL_RENDER;
+		return ADDITIVE_TRANSLUCENT;
 	}
 
 	// [VanillaCopy] of super, without drag when onGround is true

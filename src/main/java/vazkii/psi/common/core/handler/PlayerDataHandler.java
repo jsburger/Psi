@@ -56,6 +56,7 @@ import vazkii.psi.api.cad.*;
 import vazkii.psi.api.exosuit.IPsiEventArmor;
 import vazkii.psi.api.exosuit.PsiArmorEvent;
 import vazkii.psi.api.internal.IPlayerData;
+import vazkii.psi.api.internal.MathHelper;
 import vazkii.psi.api.internal.PsiRenderHelper;
 import vazkii.psi.api.internal.Vector3;
 import vazkii.psi.api.spell.*;
@@ -400,12 +401,13 @@ public class PlayerDataHandler {
 
 					ISocketable socketable = ISocketable.socketable(stackInHand);
 
-					for(int i = 0; i < 5; i++) {
+					for(int i = 0; i < 4; i++) {
 						double x = player.getX() + (Math.random() - 0.5) * 2.1 * player.getBbWidth();
-						double y = player.getY() + 0.35D;
+						double y = player.getY() + 0.35D + MathHelper.oRandom(.2);
 						double z = player.getZ() + (Math.random() - 0.5) * 2.1 * player.getBbWidth();
 						float grav = -0.15F - (float) Math.random() * 0.03F;
-						Psi.proxy.sparkleFX(x, y, z, r, g, b, grav, 0.25F, 15);
+						var motion = player.getDeltaMovement();
+						Psi.proxy.sparkleFX(x, y, z, r, g, b, (float) motion.x(), (float) (motion.y() - grav), (float) motion.z(), 0.8F, 15);
 					}
 
 					if(loopcastTime > 0 && loopcastTime % 5 == 0) {

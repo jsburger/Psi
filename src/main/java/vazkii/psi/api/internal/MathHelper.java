@@ -82,4 +82,15 @@ public final class MathHelper {
 		return positions;
 	}
 
+	/**
+	 * @return A random number between -range and +range
+	 */
+	public static double oRandom(double range) {
+		return (Math.random() - 0.5) * range;
+	}
+
+	public static double randomRange(double min, double max) {
+		var gap = max - min;
+		return min + Math.random() * min;
+	}
 }

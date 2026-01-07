@@ -29,50 +29,28 @@ import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
 
+import static vazkii.psi.api.internal.MathHelper.oRandom;
+
 // https://github.com/Vazkii/Botania/blob/1.15/src/main/java/vazkii/botania/client/fx/FXSparkle.java
 @OnlyIn(Dist.CLIENT)
 public class FXSparkle extends TextureSheetParticle {
 
-	private static final ParticleRenderType NORMAL_RENDER = new PsiParticleRenderType() {
-		@Override
-		public BufferBuilder begin(@NotNull Tesselator tessellator, @NotNull TextureManager textureManager) {
-			Minecraft.getInstance().gameRenderer.lightTexture().turnOnLightLayer();
-			RenderSystem.enableDepthTest();
-			RenderSystem.depthMask(false);
-			RenderSystem.enableBlend();
-			RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
-			RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_PARTICLES);
-			AbstractTexture tex = textureManager.getTexture(TextureAtlas.LOCATION_PARTICLES);
-			tex.setFilter(true, false);
-			return tessellator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
-		}
 
-		@Override
-		public void end() {
-			RenderSystem.disableBlend();
-			RenderSystem.depthMask(true);
-			Minecraft.getInstance().getTextureManager().getTexture(TextureAtlas.LOCATION_PARTICLES).restoreLastBlurMipmap();
-		}
-
-		@Override
-		public String toString() {
-			return "psi:sparkle";
-		}
-	};
+//	private final SpriteSet my_sprite;
 
 	public FXSparkle(ClientLevel world, double x, double y, double z, float size,
-			float red, float green, float blue, int m, double mx, double my, double mz, SpriteSet sprite) {
+					 float red, float green, float blue, int m, double mx, double my, double mz, SpriteSet sprite) {
 		super(world, x, y, z, 0.0D, 0.0D, 0.0D);
 		rCol = red;
 		gCol = green;
 		bCol = blue;
-		alpha = 0.5F;
+		alpha = 0.25F;
 		gravity = 0;
 		xd = mx;
 		yd = my;
 		zd = mz;
 		quadSize *= size;
-		lifetime = 3 * m;
+		lifetime = (int) (3 * m * (1 + oRandom(.2)));
 
 		setSize(0.01F, 0.01F);
 		// 10 is the sum of the infinite geometric series defined by the drag value of 0.9
@@ -81,7 +59,9 @@ public class FXSparkle extends TextureSheetParticle {
 		xo = x;
 		yo = y;
 		zo = z;
-		setSpriteFromAge(sprite);
+//		this.my_sprite = sprite;
+		pickSprite(sprite);
+//		setSpriteFromAge(sprite);
 	}
 
 	@Override
@@ -95,6 +75,7 @@ public class FXSparkle extends TextureSheetParticle {
 			remove();
 			return;
 		}
+		//setSpriteFromAge(my_sprite);
 
 		xo = x;
 		yo = y;
@@ -117,7 +98,7 @@ public class FXSparkle extends TextureSheetParticle {
 	@NotNull
 	@Override
 	public ParticleRenderType getRenderType() {
-		return NORMAL_RENDER;
+		return FXWisp.ADDITIVE_TRANSLUCENT;
 	}
 
 	public static class Factory implements ParticleProvider<SparkleParticleData> {

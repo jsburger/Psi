@@ -50,6 +50,7 @@ import org.jetbrains.annotations.Nullable;
 
 import vazkii.psi.api.PsiAPI;
 import vazkii.psi.api.cad.*;
+import vazkii.psi.api.internal.MathHelper;
 import vazkii.psi.api.internal.PsiRenderHelper;
 import vazkii.psi.api.internal.TooltipHelper;
 import vazkii.psi.api.internal.Vector3;
@@ -78,6 +79,9 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static vazkii.psi.api.internal.MathHelper.oRandom;
+import static vazkii.psi.api.internal.MathHelper.randomRange;
 
 public class ItemCAD extends Item implements ICAD {
 	// Legacy tags
@@ -138,33 +142,38 @@ public class ItemCAD extends Item implements ICAD {
 
 					if(cost != 0 && sound > 0) {
 						if(!world.isClientSide) {
-							world.playSound(null, player.getX(), player.getY(), player.getZ(), PsiSoundHandler.cadShoot, SoundSource.PLAYERS, sound, (float) (0.5 + Math.random() * 0.5));
+							world.playSound(null, player.getX(), player.getY(), player.getZ(), PsiSoundHandler.cadShoot, SoundSource.PLAYERS, sound, (float) (0.6 + Math.random() * 0.3));
 						} else {
 							int color = Psi.proxy.getColorForCAD(cad);
 							float r = PsiRenderHelper.r(color) / 255F;
 							float g = PsiRenderHelper.g(color) / 255F;
 							float b = PsiRenderHelper.b(color) / 255F;
+							// Upwards Puff
 							for(int i = 0; i < particles; i++) {
 								double x = player.getX() + (Math.random() - 0.5) * 2.1 * player.getBbWidth();
-								double y = player.getY() + 0.35D;
+								double y = player.getY() + 0.35D + MathHelper.oRandom(.2);
 								double z = player.getZ() + (Math.random() - 0.5) * 2.1 * player.getBbWidth();
 								float grav = -0.15F - (float) Math.random() * 0.03F;
-								Psi.proxy.sparkleFX(x, y, z, r, g, b, grav, 0.25F, 15);
+								var motion = player.getDeltaMovement();
+								Psi.proxy.sparkleFX(x, y, z, r, g, b, (float) motion.x(), (float) (motion.y() - grav), (float) motion.z(), 0.8F, 5);
 							}
 
+							//Aiming Puff
 							double x = player.getX();
-							double y = player.getY() + player.getEyeHeight() - 0.1;
+							double y = player.getY() + player.getEyeHeight() - 0.13;
 							double z = player.getZ();
 							Vector3 lookOrig = new Vector3(player.getLookAngle());
-							for(int i = 0; i < 25; i++) {
+							for(int i = 0; i < 20; i++) {
 								Vector3 look = lookOrig.copy();
-								double spread = 0.25;
-								look.x += (Math.random() - 0.5) * spread;
-								look.y += (Math.random() - 0.5) * spread;
-								look.z += (Math.random() - 0.5) * spread;
-								look.normalize().multiply(0.15);
 
-								Psi.proxy.sparkleFX(x, y, z, r, g, b, (float) look.x, (float) look.y, (float) look.z, 0.3F, 5);
+								var scaleMod = Math.random();
+								double spread = .4 + randomRange(0, scaleMod/2);
+								look.x += oRandom(spread);
+								look.y += oRandom(spread);
+								look.z += oRandom(spread);
+								look.normalize().multiply(0.1 + (.25 * scaleMod));
+
+								Psi.proxy.sparkleFX(x, y, z, r, g, b, (float) look.x, (float) look.y, (float) look.z, (float) (1F - (.8 * scaleMod)), 3);
 							}
 						}
 					}
