@@ -28,6 +28,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
+import vazkii.psi.client.core.handler.ClientTickHandler;
 
 // https://github.com/Vazkii/Botania/blob/1.15/src/main/java/vazkii/botania/client/fx/FXWisp.java
 @OnlyIn(Dist.CLIENT)
@@ -42,8 +43,8 @@ public class FXWisp extends TextureSheetParticle {
 			RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 
 			RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_PARTICLES);
-			AbstractTexture tex = textureManager.getTexture(TextureAtlas.LOCATION_PARTICLES);
-			tex.setFilter(true, false);
+			//AbstractTexture tex = textureManager.getTexture(TextureAtlas.LOCATION_PARTICLES);
+			//tex.setFilter(true, false);
 			return tessellator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
 		}
 
@@ -51,7 +52,7 @@ public class FXWisp extends TextureSheetParticle {
 		public void end() {
 			RenderSystem.disableBlend();
 			RenderSystem.depthMask(true);
-			Minecraft.getInstance().getTextureManager().getTexture(TextureAtlas.LOCATION_PARTICLES).restoreLastBlurMipmap();
+			//Minecraft.getInstance().getTextureManager().getTexture(TextureAtlas.LOCATION_PARTICLES).restoreLastBlurMipmap();
 		}
 
 		@Override
@@ -89,12 +90,13 @@ public class FXWisp extends TextureSheetParticle {
 
 	@Override
 	public float getQuadSize(float scaleFactor) {
-		float ageScale = (float) age / (float) moteHalfLife;
+		var partialTick = ClientTickHandler.partialTicks;
+		float ageScale = (age + partialTick) / (float) moteHalfLife;
 		if(ageScale > 1F) {
 			ageScale = 2 - ageScale;
 		}
 
-		quadSize = moteParticleScale * ageScale * 0.5F;
+		quadSize = (float) (moteParticleScale * (1 - Math.cos(ageScale * Math.PI))/2 * 0.5F);
 		return quadSize;
 	}
 
