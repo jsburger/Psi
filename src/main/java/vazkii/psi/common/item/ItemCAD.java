@@ -154,7 +154,19 @@ public class ItemCAD extends Item implements ICAD {
 							double y = player.getY() + player.getEyeHeight() - 0.13;
 							double z = player.getZ();
 							Vector3 lookOrig = new Vector3(player.getLookAngle());
-							for(int i = 0; i < 20; i++) {
+
+
+							if(context.castFrom != null && abs(lookOrig.y) < .95) {
+								var side = lookOrig.copy().crossProduct(new Vector3(0,1,0)).multiply(.1);
+								if (player.getMainArm() == HumanoidArm.LEFT ^ context.castFrom == InteractionHand.OFF_HAND) {
+									side.multiply(-1);
+								}
+								x += side.x;
+								y += side.y;
+								z += side.z;
+							}
+
+							for(int i = 0; i < 18; i++) {
 								Vector3 look = lookOrig.copy();
 
 								var scaleMod = Math.random();
