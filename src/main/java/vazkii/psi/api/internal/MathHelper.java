@@ -9,6 +9,7 @@
 package vazkii.psi.api.internal;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.LinkedHashSet;
@@ -86,11 +87,22 @@ public final class MathHelper {
 	 * @return A random number between -range and +range
 	 */
 	public static double oRandom(double range) {
-		return (Math.random() - 0.5) * range;
+		return (Math.random() - 0.5) * range * 2;
+	}
+	/**
+	 * @return A random number between -range and +range
+	 */
+	public static float oRandom(RandomSource random, float range) {
+		return (random.nextFloat() - .5f) * range * 2;
 	}
 
 	public static double randomRange(double min, double max) {
 		var gap = max - min;
-		return min + Math.random() * min;
+		return min + Math.random() * gap;
+	}
+
+	public static float randomRange(RandomSource random, float min, float max) {
+		var gap = max - min;
+		return min + random.nextFloat() * gap;
 	}
 }

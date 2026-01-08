@@ -41,10 +41,11 @@ public class FXSparkle extends TextureSheetParticle {
 	public FXSparkle(ClientLevel world, double x, double y, double z, float size,
 					 float red, float green, float blue, int m, double mx, double my, double mz, SpriteSet sprite) {
 		super(world, x, y, z, 0.0D, 0.0D, 0.0D);
-		rCol = red;
-		gCol = green;
-		bCol = blue;
-		alpha = 0.25F;
+		var range = .25f/2;
+		rCol = Math.min(1, red * (1 + oRandom(random, range)));
+		gCol = Math.min(1, green * (1 + oRandom(random, range)));
+		bCol = Math.min(1, blue * (1 + oRandom(random, range)));
+		alpha = 0.25F * (1 + oRandom(random, range));
 		gravity = 0;
 		xd = mx;
 		yd = my;
@@ -62,11 +63,13 @@ public class FXSparkle extends TextureSheetParticle {
 //		this.my_sprite = sprite;
 		pickSprite(sprite);
 //		setSpriteFromAge(sprite);
+		roll = (float) (Math.floor(Math.random() * 4)/4 * (Math.PI * 2));
+		oRoll = roll;
 	}
 
 	@Override
 	public float getQuadSize(float partialTicks) {
-		return quadSize * (lifetime - age + 1) / (float) lifetime;
+		return quadSize * (lifetime - (age + partialTicks) + 1) / (float) lifetime;
 	}
 
 	@Override

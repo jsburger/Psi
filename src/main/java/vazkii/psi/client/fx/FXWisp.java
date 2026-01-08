@@ -30,6 +30,9 @@ import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
 import vazkii.psi.client.core.handler.ClientTickHandler;
 
+import static vazkii.psi.api.internal.MathHelper.oRandom;
+import static vazkii.psi.api.internal.MathHelper.randomRange;
+
 // https://github.com/Vazkii/Botania/blob/1.15/src/main/java/vazkii/botania/client/fx/FXWisp.java
 @OnlyIn(Dist.CLIENT)
 public class FXWisp extends TextureSheetParticle {
@@ -70,15 +73,11 @@ public class FXWisp extends TextureSheetParticle {
 		xd = xSpeed;
 		yd = ySpeed;
 		zd = zSpeed;
-		var range = .25f;
-		float scale = 1 + this.random.nextFloat() * range - range/2;
-		rCol = Math.min(1, red * scale);
-		scale = 1 + this.random.nextFloat() * range - range/2;
-		gCol = Math.min(1, green * scale);
-		scale = 1 + this.random.nextFloat() * range - range/2;
-		bCol = Math.min(1, blue * scale);
-		scale = 1 + this.random.nextFloat() * range - range/2;
-		alpha = 0.375F/scale;
+		var range = .25f/2;
+		rCol = Math.min(1, red * (1 + oRandom(random, range)));
+		gCol = Math.min(1, green * (1 + oRandom(random, range)));
+		bCol = Math.min(1, blue * (1 + oRandom(random, range)));
+		alpha = 0.375F * (1 + oRandom(random, range));
 		gravity = 0;
 		quadSize = (this.random.nextFloat() * 0.5F + 0.5F) * 2.0F * size;
 		moteParticleScale = quadSize;
@@ -94,8 +93,7 @@ public class FXWisp extends TextureSheetParticle {
 	}
 
 	@Override
-	public float getQuadSize(float scaleFactor) {
-		var partialTick = ClientTickHandler.partialTicks;
+	public float getQuadSize(float partialTick) {
 		float ageScale = (age + partialTick) / (float) moteHalfLife;
 		if(ageScale > 1F) {
 			ageScale = 2 - ageScale;

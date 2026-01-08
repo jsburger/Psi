@@ -9,7 +9,6 @@
 package vazkii.psi.common.item;
 
 import com.google.common.collect.Lists;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -27,6 +26,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -44,10 +44,8 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.util.FakePlayer;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 import vazkii.psi.api.PsiAPI;
 import vazkii.psi.api.cad.*;
 import vazkii.psi.api.internal.MathHelper;
@@ -80,8 +78,8 @@ import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static java.lang.Math.abs;
 import static vazkii.psi.api.internal.MathHelper.oRandom;
-import static vazkii.psi.api.internal.MathHelper.randomRange;
 
 public class ItemCAD extends Item implements ICAD {
 	// Legacy tags
@@ -145,18 +143,11 @@ public class ItemCAD extends Item implements ICAD {
 							world.playSound(null, player.getX(), player.getY(), player.getZ(), PsiSoundHandler.cadShoot, SoundSource.PLAYERS, sound, (float) (0.6 + Math.random() * 0.3));
 						} else {
 							int color = Psi.proxy.getColorForCAD(cad);
+							// Upwards Puff
+							makeCastingParticles(player, color, particles);
 							float r = PsiRenderHelper.r(color) / 255F;
 							float g = PsiRenderHelper.g(color) / 255F;
 							float b = PsiRenderHelper.b(color) / 255F;
-							// Upwards Puff
-							for(int i = 0; i < particles; i++) {
-								double x = player.getX() + (Math.random() - 0.5) * 2.1 * player.getBbWidth();
-								double y = player.getY() + 0.35D + MathHelper.oRandom(.2);
-								double z = player.getZ() + (Math.random() - 0.5) * 2.1 * player.getBbWidth();
-								float grav = -0.15F - (float) Math.random() * 0.03F;
-								var motion = player.getDeltaMovement();
-								Psi.proxy.sparkleFX(x, y, z, r, g, b, (float) motion.x(), (float) (motion.y() - grav), (float) motion.z(), 0.8F, 5);
-							}
 
 							//Aiming Puff
 							double x = player.getX();
@@ -167,7 +158,7 @@ public class ItemCAD extends Item implements ICAD {
 								Vector3 look = lookOrig.copy();
 
 								var scaleMod = Math.random();
-								double spread = .4 + randomRange(0, scaleMod/2);
+								double spread = .4 - scaleMod * .2;
 								look.x += oRandom(spread);
 								look.y += oRandom(spread);
 								look.z += oRandom(spread);
@@ -190,6 +181,24 @@ public class ItemCAD extends Item implements ICAD {
 		}
 
 		return Optional.empty();
+	}
+
+	/**
+     * Makes a bunch of upwards sparkling particles
+     */
+	public static void makeCastingParticles(Entity player, int packedColor, int particleCount) {
+		float r = PsiRenderHelper.r(packedColor) / 255F;
+		float g = PsiRenderHelper.g(packedColor) / 255F;
+		float b = PsiRenderHelper.b(packedColor) / 255F;
+		var width = 2.1 * player.getBbWidth();
+		for(int i = 0; i < particleCount; i++) {
+			double x = player.getX() + (Math.random() - 0.5) * width;
+			double y = player.getY() + 0.35D + MathHelper.oRandom(.2);
+			double z = player.getZ() + (Math.random() - 0.5) * width;
+			float grav = -0.15F - (float) Math.random() * 0.03F;
+			var motion = player.getDeltaMovement();
+			Psi.proxy.sparkleFX(x, y, z, r, g, b, (float) motion.x(), (float) (motion.y() - grav), (float) motion.z(), 0.8F, 5);
+		}
 	}
 
 	public static int getRealCost(ItemStack stack, ItemStack bullet, int cost) {
