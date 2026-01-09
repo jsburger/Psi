@@ -150,13 +150,13 @@ public class ItemCAD extends Item implements ICAD {
 							float b = PsiRenderHelper.b(color) / 255F;
 
 							//Aiming Puff
-							double x = player.getX();
-							double y = player.getY() + player.getEyeHeight() - 0.13;
-							double z = player.getZ();
 							Vector3 lookOrig = new Vector3(player.getLookAngle());
+							var scale = .2;
+							double x = player.getX() + lookOrig.x * scale;
+							double y = player.getY() + player.getEyeHeight() - 0.15 + lookOrig.y * scale;
+							double z = player.getZ() + lookOrig.z * scale;
 
-
-							if(context.castFrom != null && abs(lookOrig.y) < .95) {
+							if(context.castFrom != null && abs(lookOrig.y) < .95 && player.isLocalPlayer()) {
 								var side = lookOrig.copy().crossProduct(new Vector3(0,1,0)).multiply(.1);
 								if (player.getMainArm() == HumanoidArm.LEFT ^ context.castFrom == InteractionHand.OFF_HAND) {
 									side.multiply(-1);
