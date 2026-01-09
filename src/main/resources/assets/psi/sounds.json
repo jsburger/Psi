@@ -18,7 +18,7 @@
     "sounds": [
       {
         "name": "psi:cad_shoot",
-        "volume": 0.5
+        "volume": 0.4
       }
     ],
     "subtitle": "psi.subtitle.spell_cast"
