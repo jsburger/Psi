@@ -56,7 +56,6 @@ import vazkii.psi.api.cad.*;
 import vazkii.psi.api.exosuit.IPsiEventArmor;
 import vazkii.psi.api.exosuit.PsiArmorEvent;
 import vazkii.psi.api.internal.IPlayerData;
-import vazkii.psi.api.internal.MathHelper;
 import vazkii.psi.api.internal.PsiRenderHelper;
 import vazkii.psi.api.internal.Vector3;
 import vazkii.psi.api.spell.*;

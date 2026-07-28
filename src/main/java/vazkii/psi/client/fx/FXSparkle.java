@@ -8,26 +8,15 @@
  */
 package vazkii.psi.client.fx;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexFormat;
-
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.particle.TextureSheetParticle;
-import net.minecraft.client.renderer.texture.AbstractTexture;
-import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
 import org.jetbrains.annotations.NotNull;
-import org.lwjgl.opengl.GL11;
 
 import static vazkii.psi.api.internal.MathHelper.oRandom;
 
@@ -35,13 +24,12 @@ import static vazkii.psi.api.internal.MathHelper.oRandom;
 @OnlyIn(Dist.CLIENT)
 public class FXSparkle extends TextureSheetParticle {
 
-
 //	private final SpriteSet my_sprite;
 
 	public FXSparkle(ClientLevel world, double x, double y, double z, float size,
-					 float red, float green, float blue, int m, double mx, double my, double mz, SpriteSet sprite) {
+			float red, float green, float blue, int m, double mx, double my, double mz, SpriteSet sprite) {
 		super(world, x, y, z, 0.0D, 0.0D, 0.0D);
-		var range = .25f/2;
+		var range = .25f / 2;
 		rCol = Math.min(1, red * (1 + oRandom(random, range)));
 		gCol = Math.min(1, green * (1 + oRandom(random, range)));
 		bCol = Math.min(1, blue * (1 + oRandom(random, range)));
@@ -63,7 +51,7 @@ public class FXSparkle extends TextureSheetParticle {
 //		this.my_sprite = sprite;
 		pickSprite(sprite);
 //		setSpriteFromAge(sprite);
-		roll = (float) (Math.floor(Math.random() * 4)/4 * (Math.PI * 2));
+		roll = (float) (Math.floor(Math.random() * 4) / 4 * (Math.PI * 2));
 		oRoll = roll;
 	}
 

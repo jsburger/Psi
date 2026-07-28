@@ -89,6 +89,7 @@ public final class MathHelper {
 	public static double oRandom(double range) {
 		return (Math.random() - 0.5) * range * 2;
 	}
+
 	/**
 	 * @return A random number between -range and +range
 	 */

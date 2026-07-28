@@ -20,7 +20,6 @@ import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.particle.TextureSheetParticle;
-import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.neoforged.api.distmarker.Dist;
@@ -28,10 +27,8 @@ import net.neoforged.api.distmarker.OnlyIn;
 
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
-import vazkii.psi.client.core.handler.ClientTickHandler;
 
 import static vazkii.psi.api.internal.MathHelper.oRandom;
-import static vazkii.psi.api.internal.MathHelper.randomRange;
 
 // https://github.com/Vazkii/Botania/blob/1.15/src/main/java/vazkii/botania/client/fx/FXWisp.java
 @OnlyIn(Dist.CLIENT)
@@ -73,7 +70,7 @@ public class FXWisp extends TextureSheetParticle {
 		xd = xSpeed;
 		yd = ySpeed;
 		zd = zSpeed;
-		var range = .25f/2;
+		var range = .25f / 2;
 		rCol = Math.min(1, red * (1 + oRandom(random, range)));
 		gCol = Math.min(1, green * (1 + oRandom(random, range)));
 		bCol = Math.min(1, blue * (1 + oRandom(random, range)));
@@ -99,7 +96,7 @@ public class FXWisp extends TextureSheetParticle {
 			ageScale = 2 - ageScale;
 		}
 
-		quadSize = (float) (moteParticleScale * (1 - Math.cos(ageScale * Math.PI))/2 * 0.5F);
+		quadSize = (float) (moteParticleScale * (1 - Math.cos(ageScale * Math.PI)) / 2 * 0.5F);
 		return quadSize;
 	}
 

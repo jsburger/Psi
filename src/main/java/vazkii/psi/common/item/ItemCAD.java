@@ -159,8 +159,8 @@ public class ItemCAD extends Item implements ICAD {
 							double z = player.getZ() + lookOrig.z * scale;
 
 							if(context.castFrom != null && abs(lookOrig.y) < .95 && player.isLocalPlayer()) {
-								var side = lookOrig.copy().crossProduct(new Vector3(0,1,0)).multiply(.1);
-								if (player.getMainArm() == HumanoidArm.LEFT ^ context.castFrom == InteractionHand.OFF_HAND) {
+								var side = lookOrig.copy().crossProduct(new Vector3(0, 1, 0)).multiply(.1);
+								if(player.getMainArm() == HumanoidArm.LEFT ^ context.castFrom == InteractionHand.OFF_HAND) {
 									side.multiply(-1);
 								}
 								x += side.x;
@@ -198,8 +198,8 @@ public class ItemCAD extends Item implements ICAD {
 	}
 
 	/**
-     * Makes a bunch of upwards sparkling particles
-     */
+	 * Makes a bunch of upwards sparkling particles
+	 */
 	public static void makeCastingParticles(Entity player, int packedColor, int particleCount) {
 		float r = PsiRenderHelper.r(packedColor) / 255F;
 		float g = PsiRenderHelper.g(packedColor) / 255F;
