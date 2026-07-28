@@ -185,7 +185,7 @@ public class Vector3 {
 	}
 
 	public Vec3i toVec3i() {
-		return new Vec3i((int) Math.round(x), (int) Math.round(y), (int) Math.round(z));
+		return new Vec3i((int) Math.floor(x), (int) Math.floor(y), (int) Math.floor(z));
 	}
 
 	public BlockPos toBlockPos() {
